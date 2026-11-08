@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+.env
+.env.*
+!.env.example
+procrastinator.config.yaml
+data/
+*.log
+.DS_Store

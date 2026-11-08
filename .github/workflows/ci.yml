@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Lint, format check and typecheck
+        run: npm run lint
+      - name: Tests
+        run: npm test
+      - name: Example config is valid and the dry run works
+        run: |
+          npm run plan -- check --config procrastinator.config.example.yaml
+          npm run plan -- plan --config procrastinator.config.example.yaml --items examples/items.json --today 2026-11-09

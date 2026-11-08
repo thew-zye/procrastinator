@@ -1,0 +1,35 @@
+{
+  "name": "procrastinator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An agent that starts your work as drafts before you would: plans start dates, caps the active pile, asks for a weekly pick and opens drafts overnight. Never merges, publishes, sends or assigns.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "bin": {
+    "procrastinator": "src/cli.ts"
+  },
+  "scripts": {
+    "plan": "node src/cli.ts",
+    "lint": "eslint . && prettier --check . && npm run typecheck",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "ci": "npm run lint && npm test"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0"
+  }
+}

@@ -1,0 +1,130 @@
+# Procrastinator config. Copy to procrastinator.config.yaml (gitignored) and edit.
+# Every value here is the default. Leave a key out to keep its default.
+# No secrets in this file: adapters read credentials from env vars or the OS keychain.
+
+# IANA time zone for every date and time below.
+timezone: UTC
+
+# Print every write instead of making it. Turn off per job under `jobs` once you trust it.
+dryRun: true
+
+# Most items active at once. New items are parked until a slot frees up.
+activeCap: 3
+
+# The ledger's "now" item (from the work memory system) is always one of the active items.
+keepNowItemActive: true
+
+# Label names in your ledger. Map these to tags, properties or columns in your adapter.
+labels:
+  active: active
+  parked: parked
+  sizeBig: size-big
+  sizeSmall: size-small
+  now: now
+
+size:
+  # What to do when an item has no size: guess (the worker guesses at capture, you fix the label),
+  # ask (a question in the morning report), or always small / always big.
+  whenMissing: guess
+  # Size used for dates until a guess or answer lands.
+  fallback: small
+
+# Items with a real due date start this many days before it.
+leadDays:
+  big: 7
+  small: 2
+
+# Items with no due date get a nudge date this many days after they were created.
+# A real due date added later overrides it. Proposed defaults, not settled.
+nudgeDays:
+  big: 10
+  small: 3
+
+# An active item you haven't touched for this many days since its last draft gets pushed one step further.
+stallDays: 5
+
+# A dated item needs starting but every slot is full:
+# flag (top of the parked list and in the morning report; never breaks the cap) or exceed (goes active anyway).
+dueWhenCapFull: flag
+
+# Ranking order for the parked list. Keys: due (dated items by start date), nudge (undated by nudge date),
+# created (oldest first). Ties fall through to the next key.
+ranking: [due, nudge, created]
+
+weeklyPick:
+  # Day and local time the pick message goes out.
+  day: monday
+  time: '09:00'
+  # How many ranked parked items the message lists.
+  count: 5
+  # Hours to wait for your reply before the fallback runs.
+  replyWindowHours: 8
+  # No reply: carry-over-then-fill (keep unfinished active items, fill free slots by rank) or carry-over-only.
+  onSkip: carry-over-then-fill
+  # Your own user id in the chat tool. Replies from anyone else are ignored. Required unless adapters.chat is console.
+  acceptRepliesFrom: ''
+
+schedule:
+  # Local time the nightly draft run starts.
+  nightly: '02:00'
+  # Local time the morning report goes out.
+  report: '08:30'
+
+startWork:
+  # Draft steps per active item per night. 0 pauses drafting without turning the job off.
+  maxStepsPerItemPerNight: 1
+  # What the worker may make. Remove any you don't want.
+  allowedActions: [branch, stubs, draft-pr, draft-doc, outline, question]
+  # Unclear items: outline-and-question (an outline plus one question in the report) or skip.
+  unclear: outline-and-question
+  # Put at the top of every draft PR description and doc, so readers know an agent started it.
+  draftMarker: 'Started by Procrastinator. Draft only, nothing was sent or merged.'
+
+codeHost:
+  # Every branch the agent makes starts with this. It refuses to push anywhere else.
+  branchPrefix: procrastinator/
+  # Branch name. Placeholders: {prefix}, {key}, {slug}. Must start with {prefix}.
+  branchPattern: '{prefix}{key}-{slug}'
+  # Repos it may push branches to, as owner/name. Empty means none, so code drafts stay off until you list some.
+  allowedRepos: []
+  # Never pushed to, even with the prefix. The repo's default branch is always protected too. * is a wildcard.
+  protectedBranches: [main, master, develop, 'release/*']
+
+docs:
+  # Your private draft location: a folder path, a space or database id, depending on adapters.docs.
+  location: ''
+  # Added to every draft doc title.
+  titlePrefix: '[Draft] '
+
+report:
+  # own-message (its own direct message) or digest-section (handed to an existing digest, fewer messages).
+  delivery: own-message
+  # Sections, in order. Remove any you don't want.
+  sections: [started, no-slot, refused, failed, questions]
+  # Send "Nothing started overnight." on quiet nights instead of staying silent.
+  sendWhenEmpty: false
+
+ownWrites:
+  # Where the log of the agent's own writes lives. Keys, kinds and times only.
+  path: data/own-writes.jsonl
+  # A history entry this close to one of the agent's writes counts as the agent, not you.
+  matchWindowSeconds: 120
+
+# Where start dates live: ledger (a field on the item) or local (the agent's own data folder).
+startDateStorage: ledger
+
+# Which adapter backs each part. Built in: ledger fake, chat console, docs markdown is planned, codeHost fake.
+adapters:
+  ledger: fake
+  chat: console
+  docs: markdown
+  codeHost: fake
+
+# Turn jobs on or off, and give any job its own dryRun to override the top-level one.
+jobs:
+  planDates: { enabled: true }
+  weeklyPick: { enabled: true }
+  weeklyFallback: { enabled: true }
+  pullNext: { enabled: true }
+  startWork: { enabled: true }
+  morningReport: { enabled: true }

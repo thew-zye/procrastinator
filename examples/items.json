@@ -1,0 +1,53 @@
+[
+  {
+    "key": "W-1",
+    "summary": "Write the quarterly plan",
+    "status": "open",
+    "labels": ["size-big", "now"],
+    "created": "2026-10-20",
+    "due": "2026-11-20",
+    "state": "active",
+    "startedOn": "2026-11-02"
+  },
+  {
+    "key": "W-2",
+    "summary": "Fix flaky login test",
+    "status": "open",
+    "labels": ["size-small"],
+    "created": "2026-11-01",
+    "due": "2026-11-11"
+  },
+  {
+    "key": "W-3",
+    "summary": "Try a new caching layer",
+    "status": "open",
+    "labels": ["size-big", "side-quest"],
+    "created": "2026-10-28"
+  },
+  { "key": "W-4", "summary": "Update onboarding doc", "status": "open", "labels": [], "created": "2026-11-04" },
+  {
+    "key": "W-5",
+    "summary": "Clean up old feature flags",
+    "status": "open",
+    "labels": ["size-small"],
+    "created": "2026-10-15",
+    "state": "active",
+    "startedOn": "2026-10-30"
+  },
+  {
+    "key": "W-6",
+    "summary": "Draft the migration RFC",
+    "status": "open",
+    "labels": ["size-big"],
+    "created": "2026-11-05",
+    "due": "2026-11-16"
+  },
+  {
+    "key": "W-7",
+    "summary": "Ship the export button",
+    "status": "done",
+    "labels": ["size-small"],
+    "created": "2026-10-10",
+    "state": "active"
+  }
+]
